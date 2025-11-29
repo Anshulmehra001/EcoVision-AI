@@ -1,0 +1,28 @@
+{
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Plant Health Assessment",
+      "description": "Assess and document plant health in your area",
+      "instructions": "Use Flora Shield to identify plant diseases and document your findings",
+      "points": 50,
+      "trigger": "plant_disease_detected"
+    },
+    {
+      "id": 2,
+      "title": "Bird Species Documentation",
+      "description": "Record and identify local bird species",
+      "instructions": "Use Biodiversity Ear to record bird sounds and identify species",
+      "points": 30,
+      "trigger": "bird_species_identified"
+    },
+    {
+      "id": 3,
+      "title": "Water Quality Testing",
+      "description": "Test local water sources for quality parameters",
+      "instructions": "Use Aqua Lens to analyze water test strips and document results",
+      "points": 40,
+      "trigger": "water_test_completed"
+    }
+  ]
+}

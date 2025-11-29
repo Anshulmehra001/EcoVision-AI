@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EcoVision AI - Architecture Diagrams</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #f1f5f9;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    h1 {
+      font-size: 42px;
+      background: linear-gradient(135deg, #0ea5e9, #10b981);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
+    }
+    
+    .subtitle {
+      color: #94a3b8;
+      font-size: 18px;
+    }
+    
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .tab {
+      padding: 12px 24px;
+      background: #1e293b;
+      border: 2px solid #334155;
+      border-radius: 8px;
+      color: #cbd5e1;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 16px;
+      font-weight: 600;
+    }
+    
+    .tab:hover {
+      border-color: #0ea5e9;
+      color: #0ea5e9;
+    }
+    
+    .tab.active {
+      background: #0ea5e9;
+      border-color: #0ea5e9;
+      color: white;
+    }
+    
+    .content {
+      display: none;
+    }
+    
+    .content.active {
+      display: block;
+    }
+    
+    .diagram-box {
+      background: #1e293b;
+      border: 2px solid #334155;
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 30px;
+      min-height: 400px;
+    }
+    
+    .diagram {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 400px;
+    }
+    
+    .controls {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    button {
+      padding: 12px 28px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .btn-primary {
+      background: #10b981;
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background: #059669;
+      transform: translateY(-2px);
+    }
+    
+    .btn-secondary {
+      background: #334155;
+      color: white;
+    }
+    
+    .btn-secondary:hover {
+      background: #475569;
+    }
+    
+    footer {
+      text-align: center;
+      margin-top: 50px;
+      color: #64748b;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🌿 EcoVision AI Architecture</h1>
+      <p class="subtitle">Professional Diagrams for Your Project</p>
+    </header>
+
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('arch')">Architecture</button>
+      <button class="tab" onclick="switchTab('bird')">Bird ID Flow</button>
+      <button class="tab" onclick="switchTab('water')">Water Analysis</button>
+      <button class="tab" onclick="switchTab('eco')">Eco Action Hub</button>
+      <button class="tab" onclick="switchTab('data')">Data Pipeline</button>
+    </div>
+
+    <!-- Architecture -->
+    <div id="arch" class="content active">
+      <div class="diagram-box">
+        <div id="arch-diagram" class="diagram"></div>
+      </div>
+      <div class="controls">
+        <button class="btn-primary" onclick="downloadDiagram('arch')">📥 Download PNG</button>
+        <button class="btn-secondary" onclick="downloadSVG('arch')">📥 Download SVG</button>
+      </div>
+    </div>
+
+    <!-- Bird Flow -->
+    <div id="bird" class="content">
+      <div class="diagram-box">
+        <div id="bird-diagram" class="diagram"></div>
+      </div>
+      <div class="controls">
+        <button class="btn-primary" onclick="downloadDiagram('bird')">📥 Download PNG</button>
+        <button class="btn-secondary" onclick="downloadSVG('bird')">📥 Download SVG</button>
+      </div>
+    </div>
+
+    <!-- Water -->
+    <div id="water" class="content">
+      <div class="diagram-box">
+        <div id="water-diagram" class="diagram"></div>
+      </div>
+      <div class="controls">
+        <button class="btn-primary" onclick="downloadDiagram('water')">📥 Download PNG</button>
+        <button class="btn-secondary" onclick="downloadSVG('water')">📥 Download SVG</button>
+      </div>
+    </div>
+
+    <!-- Eco -->
+    <div id="eco" class="content">
+      <div class="diagram-box">
+        <div id="eco-diagram" class="diagram"></div>
+      </div>
+      <div class="controls">
+        <button class="btn-primary" onclick="downloadDiagram('eco')">📥 Download PNG</button>
+        <button class="btn-secondary" onclick="downloadSVG('eco')">📥 Download SVG</button>
+      </div>
+    </div>
+
+    <!-- Data -->
+    <div id="data" class="content">
+      <div class="diagram-box">
+        <div id="data-diagram" class="diagram"></div>
+      </div>
+      <div class="controls">
+        <button class="btn-primary" onclick="downloadDiagram('data')">📥 Download PNG</button>
+        <button class="btn-secondary" onclick="downloadSVG('data')">📥 Download SVG</button>
+      </div>
+    </div>
+
+    <footer>Made with ❤️ for EcoVision AI</footer>
+  </div>
+
+  <script>
+    const diagrams = {
+      arch: `graph TB
+    A[Flutter App v3.38.3] --> B[Features]
+    B --> F1[Biodiversity Ear]
+    B --> F2[Aqua Lens]
+    B --> F3[Eco Action Hub]
+    
+    A --> C[Core Services]
+    C --> S1[TFLite Service]
+    C --> S2[BirdNET API]
+    C --> S3[OpenCV Service]
+    
+    F1 --> S1
+    F2 --> S3
+    
+    S1 -->|Online| API[Cloud API<br/>95-98%]
+    S1 -->|Offline| SP[Signal Processing<br/>75-80%]
+    
+    A --> D[Data Layer]
+    D --> D1[SharedPreferences]
+    D --> D2[JSON Assets]
+    
+    style A fill:#1B5E20,stroke:#fff,color:#fff
+    style API fill:#ef4444,stroke:#fff,color:#fff
+    style SP fill:#ec4899,stroke:#fff,color:#fff`,
+
+      bird: `flowchart TD
+    Start([Start]) --> Perm{Permission?}
+    Perm -->|Yes| Record[Record 10s Audio]
+    Perm -->|No| Request[Request Permission]
+    Request --> Perm
+    
+    Record --> Check{Online?}
+    Check -->|Yes| Cloud[BirdNET API<br/>95-98% Accuracy]
+    Check -->|No| Local[Signal Processing<br/>75-80% Accuracy]
+    
+    Cloud --> Results[Show Top 5 Results]
+    Local --> Results
+    Results --> End([End])
+    
+    style Start fill:#10b981,stroke:#fff,color:#fff
+    style Cloud fill:#0ea5e9,stroke:#fff,color:#fff
+    style Local fill:#f59e0b,stroke:#fff,color:#000
+    style End fill:#10b981,stroke:#fff,color:#fff`,
+
+      water: `flowchart TD
+    Start([Start]) --> Perm{Camera Permission?}
+    Perm -->|Yes| Capture[Capture Image]
+    Perm -->|No| Request[Request Permission]
+    Request --> Perm
+    
+    Capture --> Process[OpenCV Service]
+    Process --> Extract[Extract RGB Values]
+    Extract --> Regions[pH Chlorine Hardness Alkalinity]
+    Regions --> Display[Display Results]
+    Display --> End([End])
+    
+    style Start fill:#0ea5e9,stroke:#fff,color:#fff
+    style Process fill:#9333ea,stroke:#fff,color:#fff
+    style End fill:#10b981,stroke:#fff,color:#fff`,
+
+      eco: `graph TD
+    A[Eco Action Hub] --> B[Load Tasks]
+    B --> C[50+ Tasks JSON]
+    
+    A --> D[User Progress]
+    D --> E[Points System]
+    D --> F[Achievements]
+    
+    C --> G[Task Categories]
+    G --> G1[Conservation]
+    G --> G2[Energy]
+    G --> G3[Waste]
+    G --> G4[Water]
+    
+    E --> H[Track Progress]
+    H --> I[SharedPreferences]
+    
+    F --> J[Badges]
+    J --> J1[Beginner - 10 Tasks]
+    J --> J2[Enthusiast - 25 Tasks]
+    J --> J3[Champion - 50 Tasks]
+    
+    style A fill:#10b981,stroke:#fff,color:#fff
+    style E fill:#f59e0b,stroke:#fff,color:#000
+    style J fill:#9333ea,stroke:#fff,color:#fff`,
+
+      data: `flowchart TB
+    subgraph Input
+      I1[Microphone]
+      I2[Camera]
+      I3[User Input]
+    end
+    
+    subgraph Processing
+      P1[Audio Processing]
+      P2[Image Processing]
+      P3[Task Logic]
+    end
+    
+    subgraph Services
+      S1[TFLite Service]
+      S2[BirdNET API]
+      S3[OpenCV Service]
+    end
+    
+    subgraph Storage
+      D1[SharedPreferences]
+      D2[JSON Assets]
+      D3[Memory Cache]
+    end
+    
+    I1 --> P1
+    I2 --> P2
+    I3 --> P3
+    
+    P1 --> S1
+    P1 --> S2
+    P2 --> S3
+    
+    S1 --> D3
+    S2 --> D3
+    S3 --> D3
+    P3 --> D1
+    
+    D2 --> P3
+    
+    style S1 fill:#9333ea,stroke:#fff,color:#fff
+    style S2 fill:#0ea5e9,stroke:#fff,color:#fff
+    style S3 fill:#10b981,stroke:#fff,color:#fff`
+    };
+
+    let currentTab = 'arch';
+    let renderedDiagrams = {};
+
+    mermaid.initialize({ 
+      startOnLoad: false,
+      theme: 'dark',
+      themeVariables: {
+        primaryColor: '#0ea5e9',
+        primaryTextColor: '#fff',
+        primaryBorderColor: '#0284c7',
+        lineColor: '#64748b',
+        secondaryColor: '#10b981',
+        tertiaryColor: '#f59e0b'
+      }
+    });
+
+    async function renderDiagram(name) {
+      if (renderedDiagrams[name]) return;
+      
+      const container = document.getElementById(name + '-diagram');
+      try {
+        const { svg } = await mermaid.render(name + '-svg', diagrams[name]);
+        container.innerHTML = svg;
+        renderedDiagrams[name] = true;
+      } catch (e) {
+        container.innerHTML = '<p style="color:#ef4444;">Error rendering diagram</p>';
+        console.error(e);
+      }
+    }
+
+    function switchTab(name) {
+      currentTab = name;
+      
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+      
+      event.target.classList.add('active');
+      document.getElementById(name).classList.add('active');
+      
+      renderDiagram(name);
+    }
+
+    function downloadDiagram(name) {
+      const svg = document.querySelector(`#${name}-diagram svg`);
+      if (!svg) {
+        alert('Please wait for diagram to load');
+        return;
+      }
+
+      // Force CORS-friendly image loading
+      const svgClone = svg.cloneNode(true);
+      const svgString = new XMLSerializer().serializeToString(svgClone);
+      
+      // Encode properly for data URL
+      const encodedSvg = encodeURIComponent(svgString)
+        .replace(/'/g, '%27')
+        .replace(/"/g, '%22');
+      
+      const dataUrl = `data:image/svg+xml,${encodedSvg}`;
+
+      const canvas = document.createElement('canvas');
+      canvas.width = 1920;
+      canvas.height = 1080;
+      const ctx = canvas.getContext('2d');
+
+      ctx.fillStyle = '#1e293b';
+      ctx.fillRect(0, 0, 1920, 1080);
+
+      const img = new Image();
+      
+      img.onload = function() {
+        try {
+          const scale = Math.min(1920 / img.width, 1080 / img.height) * 0.9;
+          const w = img.width * scale;
+          const h = img.height * scale;
+          const x = (1920 - w) / 2;
+          const y = (1080 - h) / 2;
+
+          ctx.drawImage(img, x, y, w, h);
+
+          // Convert canvas to blob and trigger download
+          canvas.toBlob(function(blob) {
+            if (!blob) {
+              alert('Failed to create image');
+              return;
+            }
+            
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `EcoVision-${name}-diagram.png`;
+            a.style.display = 'none';
+            
+            document.body.appendChild(a);
+            
+            // Small delay to ensure DOM is ready
+            setTimeout(() => {
+              a.click();
+              setTimeout(() => {
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+              }, 100);
+            }, 50);
+          }, 'image/png', 1.0);
+        } catch (error) {
+          console.error('Drawing error:', error);
+          alert('Failed to create PNG: ' + error.message);
+        }
+      };
+      
+      img.onerror = function(err) {
+        console.error('Image load error:', err);
+        alert('Failed to load diagram. Try SVG download instead.');
+      };
+      
+      // Set source to trigger load
+      img.src = dataUrl;
+    }
+
+    function downloadSVG(name) {
+      const svg = document.querySelector(`#${name}-diagram svg`);
+      if (!svg) {
+        alert('Please wait for diagram to load');
+        return;
+      }
+
+      const svgString = new XMLSerializer().serializeToString(svg);
+      const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `EcoVision-${name}-diagram.svg`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    // Render first diagram on load
+    window.addEventListener('DOMContentLoaded', () => {
+      renderDiagram('arch');
+    });
+  </script>
+</body>
+</html>

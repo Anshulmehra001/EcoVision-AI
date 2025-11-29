@@ -1,0 +1,142 @@
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    id "dev.flutter.flutter-gradle-plugin"
+}
+
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withReader('UTF-8') { reader ->
+        localProperties.load(reader)
+    }
+}
+
+def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
+if (flutterVersionCode == null) {
+    flutterVersionCode = '1'
+}
+
+def flutterVersionName = localProperties.getProperty('flutter.versionName')
+if (flutterVersionName == null) {
+    flutterVersionName = '1.0'
+}
+
+android {
+    namespace "com.virenlegacy.ecovisionai"
+    compileSdk 36
+    ndkVersion flutter.ndkVersion
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+    
+    // Optimize build performance
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+    
+    // Package options for optimization
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/*.kotlin_module'
+    }
+
+    defaultConfig {
+        applicationId "com.virenlegacy.ecovisionai"
+        minSdkVersion flutter.minSdkVersion
+        targetSdkVersion 34
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
+        
+        // Enable multidex for large app
+        multiDexEnabled true
+        
+        // Optimize for release
+        ndk {
+            abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86_64'
+        }
+    }
+
+    // Signing configurations
+    signingConfigs {
+        release {
+            // Load keystore properties from key.properties file
+            def keystorePropertiesFile = rootProject.file("key.properties")
+            if (keystorePropertiesFile.exists()) {
+                def keystoreProperties = new Properties()
+                keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+                def storePath = keystoreProperties['storeFile']
+                def storeFileObj = file(storePath)
+                if (storeFileObj.exists()) {
+                    keyAlias keystoreProperties['keyAlias']
+                    keyPassword keystoreProperties['keyPassword']
+                    storeFile storeFileObj
+                    storePassword keystoreProperties['storePassword']
+                } else {
+                    // Fallback when keystore path in key.properties does not exist
+                    keyAlias 'AndroidDebugKey'
+                    keyPassword 'android'
+                    storeFile file(System.properties['user.home'] + '/.android/debug.keystore')
+                    storePassword 'android'
+                }
+            } else {
+                // Fallback: Sign with the default Android debug keystore so the APK is installable
+                // NOTE: Replace with a proper release keystore for production distribution
+                keyAlias 'AndroidDebugKey'
+                keyPassword 'android'
+                storeFile file(System.properties['user.home'] + '/.android/debug.keystore')
+                storePassword 'android'
+            }
+        }
+    }
+    
+    buildTypes {
+        release {
+            // Minification disabled - APK is larger but more compatible
+            // Enable for production to reduce size by ~50%
+            minifyEnabled false
+            shrinkResources false
+            
+            // ProGuard configuration
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            
+            // Signing configuration
+            signingConfig signingConfigs.release
+            
+            // Strip debug symbols
+            ndk {
+                debugSymbolLevel 'NONE'
+            }
+        }
+        
+        debug {
+            minifyEnabled false
+            shrinkResources false
+        }
+    }
+}
+
+flutter {
+    source '../..'
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}

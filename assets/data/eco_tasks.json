@@ -1,0 +1,504 @@
+{
+  "tasks": [
+    {
+      "id": "reduce_plastic_1",
+      "title": "Use Reusable Shopping Bags",
+      "description": "Replace single-use plastic bags with reusable cloth or jute bags for all shopping trips",
+      "category": "Reduce Plastic",
+      "points": 10,
+      "impact": "Saves 100+ plastic bags per year",
+      "difficulty": "easy",
+      "icon": "shopping_bag"
+    },
+    {
+      "id": "reduce_plastic_2",
+      "title": "Carry Reusable Water Bottle",
+      "description": "Stop buying bottled water and carry your own reusable bottle everywhere",
+      "category": "Reduce Plastic",
+      "points": 15,
+      "impact": "Prevents 150+ plastic bottles annually",
+      "difficulty": "easy",
+      "icon": "water_drop"
+    },
+    {
+      "id": "reduce_plastic_3",
+      "title": "Say No to Plastic Straws",
+      "description": "Refuse plastic straws at restaurants and cafes, use metal or bamboo alternatives",
+      "category": "Reduce Plastic",
+      "points": 10,
+      "impact": "Saves 500+ straws per year",
+      "difficulty": "easy",
+      "icon": "no_drinks"
+    },
+    {
+      "id": "reduce_plastic_4",
+      "title": "Use Reusable Food Containers",
+      "description": "Pack lunch in reusable containers instead of disposable plastic",
+      "category": "Reduce Plastic",
+      "points": 15,
+      "impact": "Eliminates 200+ disposable containers yearly",
+      "difficulty": "easy",
+      "icon": "lunch_dining"
+    },
+    {
+      "id": "reduce_plastic_5",
+      "title": "Buy Products with Minimal Packaging",
+      "description": "Choose products with less plastic packaging or buy in bulk",
+      "category": "Reduce Plastic",
+      "points": 20,
+      "impact": "Reduces packaging waste by 30%",
+      "difficulty": "medium",
+      "icon": "inventory_2"
+    },
+    {
+      "id": "energy_1",
+      "title": "Switch to LED Bulbs",
+      "description": "Replace all incandescent bulbs with energy-efficient LED bulbs",
+      "category": "Save Energy",
+      "points": 25,
+      "impact": "Reduces energy use by 75%",
+      "difficulty": "easy",
+      "icon": "lightbulb"
+    },
+    {
+      "id": "energy_2",
+      "title": "Unplug Devices When Not in Use",
+      "description": "Unplug chargers and electronics to prevent phantom energy drain",
+      "category": "Save Energy",
+      "points": 15,
+      "impact": "Saves 10% on electricity bills",
+      "difficulty": "easy",
+      "icon": "power"
+    },
+    {
+      "id": "energy_3",
+      "title": "Use Natural Light During Day",
+      "description": "Open curtains and use sunlight instead of artificial lighting",
+      "category": "Save Energy",
+      "points": 10,
+      "impact": "Reduces daytime energy use by 50%",
+      "difficulty": "easy",
+      "icon": "wb_sunny"
+    },
+    {
+      "id": "energy_4",
+      "title": "Air Dry Clothes",
+      "description": "Hang clothes to dry instead of using electric dryer",
+      "category": "Save Energy",
+      "points": 20,
+      "impact": "Saves 1000 kWh annually",
+      "difficulty": "easy",
+      "icon": "dry_cleaning"
+    },
+    {
+      "id": "energy_5",
+      "title": "Use Ceiling Fans Instead of AC",
+      "description": "Opt for fans when possible to reduce air conditioning usage",
+      "category": "Save Energy",
+      "points": 25,
+      "impact": "Cuts cooling costs by 40%",
+      "difficulty": "medium",
+      "icon": "air"
+    },
+    {
+      "id": "water_1",
+      "title": "Fix Leaky Faucets",
+      "description": "Repair all dripping taps to prevent water wastage",
+      "category": "Conserve Water",
+      "points": 20,
+      "impact": "Saves 3000 gallons per year",
+      "difficulty": "medium",
+      "icon": "plumbing"
+    },
+    {
+      "id": "water_2",
+      "title": "Take Shorter Showers",
+      "description": "Reduce shower time to 5 minutes or less",
+      "category": "Conserve Water",
+      "points": 15,
+      "impact": "Saves 2500 gallons annually",
+      "difficulty": "easy",
+      "icon": "shower"
+    },
+    {
+      "id": "water_3",
+      "title": "Turn Off Tap While Brushing",
+      "description": "Don't let water run while brushing teeth or washing hands",
+      "category": "Conserve Water",
+      "points": 10,
+      "impact": "Saves 200 gallons monthly",
+      "difficulty": "easy",
+      "icon": "water_drop"
+    },
+    {
+      "id": "water_4",
+      "title": "Collect Rainwater",
+      "description": "Set up rain barrels to collect water for plants",
+      "category": "Conserve Water",
+      "points": 30,
+      "impact": "Saves 1300 gallons per year",
+      "difficulty": "hard",
+      "icon": "water"
+    },
+    {
+      "id": "water_5",
+      "title": "Use Bucket Instead of Hose",
+      "description": "Wash car with bucket and sponge instead of running hose",
+      "category": "Conserve Water",
+      "points": 15,
+      "impact": "Saves 100 gallons per wash",
+      "difficulty": "easy",
+      "icon": "local_car_wash"
+    },
+    {
+      "id": "transport_1",
+      "title": "Walk or Bike for Short Trips",
+      "description": "Use active transport for trips under 2 km",
+      "category": "Green Transport",
+      "points": 20,
+      "impact": "Reduces CO2 by 500 kg yearly",
+      "difficulty": "easy",
+      "icon": "directions_bike"
+    },
+    {
+      "id": "transport_2",
+      "title": "Use Public Transportation",
+      "description": "Take bus, train, or metro instead of personal vehicle",
+      "category": "Green Transport",
+      "points": 25,
+      "impact": "Cuts emissions by 4800 lbs/year",
+      "difficulty": "medium",
+      "icon": "directions_bus"
+    },
+    {
+      "id": "transport_3",
+      "title": "Carpool to Work",
+      "description": "Share rides with colleagues or neighbors",
+      "category": "Green Transport",
+      "points": 30,
+      "impact": "Reduces traffic and emissions by 50%",
+      "difficulty": "medium",
+      "icon": "group"
+    },
+    {
+      "id": "transport_4",
+      "title": "Maintain Proper Tire Pressure",
+      "description": "Keep vehicle tires inflated to recommended pressure",
+      "category": "Green Transport",
+      "points": 15,
+      "impact": "Improves fuel efficiency by 3%",
+      "difficulty": "easy",
+      "icon": "tire_repair"
+    },
+    {
+      "id": "transport_5",
+      "title": "Combine Multiple Errands",
+      "description": "Plan trips to do multiple tasks in one journey",
+      "category": "Green Transport",
+      "points": 10,
+      "impact": "Reduces unnecessary trips by 30%",
+      "difficulty": "easy",
+      "icon": "map"
+    },
+    {
+      "id": "food_1",
+      "title": "Eat More Plant-Based Meals",
+      "description": "Have at least 3 meatless days per week",
+      "category": "Sustainable Food",
+      "points": 25,
+      "impact": "Reduces carbon footprint by 1000 lbs/year",
+      "difficulty": "medium",
+      "icon": "restaurant"
+    },
+    {
+      "id": "food_2",
+      "title": "Buy Local and Seasonal Produce",
+      "description": "Purchase fruits and vegetables from local farmers",
+      "category": "Sustainable Food",
+      "points": 20,
+      "impact": "Cuts food miles by 80%",
+      "difficulty": "easy",
+      "icon": "storefront"
+    },
+    {
+      "id": "food_3",
+      "title": "Compost Food Scraps",
+      "description": "Start composting kitchen waste for garden fertilizer",
+      "category": "Sustainable Food",
+      "points": 30,
+      "impact": "Diverts 300 lbs from landfills yearly",
+      "difficulty": "medium",
+      "icon": "compost"
+    },
+    {
+      "id": "food_4",
+      "title": "Reduce Food Waste",
+      "description": "Plan meals and use leftovers to minimize waste",
+      "category": "Sustainable Food",
+      "points": 20,
+      "impact": "Saves $1500 and reduces methane emissions",
+      "difficulty": "medium",
+      "icon": "food_bank"
+    },
+    {
+      "id": "food_5",
+      "title": "Grow Your Own Herbs",
+      "description": "Start a small herb garden at home",
+      "category": "Sustainable Food",
+      "points": 15,
+      "impact": "Reduces packaging and transport emissions",
+      "difficulty": "easy",
+      "icon": "yard"
+    },
+    {
+      "id": "recycle_1",
+      "title": "Set Up Home Recycling System",
+      "description": "Create separate bins for paper, plastic, glass, and metal",
+      "category": "Recycle & Reuse",
+      "points": 20,
+      "impact": "Diverts 70% of waste from landfills",
+      "difficulty": "easy",
+      "icon": "recycling"
+    },
+    {
+      "id": "recycle_2",
+      "title": "Donate Old Clothes",
+      "description": "Give unwanted clothing to charity instead of throwing away",
+      "category": "Recycle & Reuse",
+      "points": 15,
+      "impact": "Prevents textile waste",
+      "difficulty": "easy",
+      "icon": "checkroom"
+    },
+    {
+      "id": "recycle_3",
+      "title": "Repair Instead of Replace",
+      "description": "Fix broken items rather than buying new ones",
+      "category": "Recycle & Reuse",
+      "points": 25,
+      "impact": "Reduces e-waste and consumption",
+      "difficulty": "medium",
+      "icon": "build"
+    },
+    {
+      "id": "recycle_4",
+      "title": "Buy Second-Hand Items",
+      "description": "Shop at thrift stores for clothes, furniture, and books",
+      "category": "Recycle & Reuse",
+      "points": 20,
+      "impact": "Reduces manufacturing demand",
+      "difficulty": "easy",
+      "icon": "shopping_cart"
+    },
+    {
+      "id": "recycle_5",
+      "title": "Upcycle Old Items",
+      "description": "Transform old items into something new and useful",
+      "category": "Recycle & Reuse",
+      "points": 25,
+      "impact": "Prevents waste and saves resources",
+      "difficulty": "medium",
+      "icon": "auto_fix_high"
+    },
+    {
+      "id": "nature_1",
+      "title": "Plant a Tree",
+      "description": "Plant and care for a tree in your community",
+      "category": "Protect Nature",
+      "points": 50,
+      "impact": "Absorbs 48 lbs of CO2 annually",
+      "difficulty": "medium",
+      "icon": "park"
+    },
+    {
+      "id": "nature_2",
+      "title": "Create Wildlife Habitat",
+      "description": "Set up bird feeders or bee-friendly plants",
+      "category": "Protect Nature",
+      "points": 30,
+      "impact": "Supports local biodiversity",
+      "difficulty": "easy",
+      "icon": "pets"
+    },
+    {
+      "id": "nature_3",
+      "title": "Join Beach/Park Cleanup",
+      "description": "Participate in local environmental cleanup events",
+      "category": "Protect Nature",
+      "points": 40,
+      "impact": "Removes harmful waste from ecosystems",
+      "difficulty": "medium",
+      "icon": "cleaning_services"
+    },
+    {
+      "id": "nature_4",
+      "title": "Avoid Pesticides",
+      "description": "Use natural pest control methods in your garden",
+      "category": "Protect Nature",
+      "points": 20,
+      "impact": "Protects pollinators and soil health",
+      "difficulty": "medium",
+      "icon": "bug_report"
+    },
+    {
+      "id": "nature_5",
+      "title": "Support Conservation Organizations",
+      "description": "Donate or volunteer with environmental groups",
+      "category": "Protect Nature",
+      "points": 35,
+      "impact": "Funds critical conservation work",
+      "difficulty": "easy",
+      "icon": "volunteer_activism"
+    },
+    {
+      "id": "digital_1",
+      "title": "Reduce Email Storage",
+      "description": "Delete old emails and unsubscribe from unwanted lists",
+      "category": "Digital Footprint",
+      "points": 10,
+      "impact": "Reduces data center energy use",
+      "difficulty": "easy",
+      "icon": "email"
+    },
+    {
+      "id": "digital_2",
+      "title": "Stream in Lower Quality",
+      "description": "Watch videos in SD instead of HD when possible",
+      "category": "Digital Footprint",
+      "points": 10,
+      "impact": "Cuts streaming emissions by 60%",
+      "difficulty": "easy",
+      "icon": "video_settings"
+    },
+    {
+      "id": "digital_3",
+      "title": "Use Eco-Friendly Search Engine",
+      "description": "Switch to search engines that plant trees",
+      "category": "Digital Footprint",
+      "points": 15,
+      "impact": "Funds reforestation projects",
+      "difficulty": "easy",
+      "icon": "search"
+    },
+    {
+      "id": "digital_4",
+      "title": "Turn Off Auto-Play Videos",
+      "description": "Disable auto-play on social media and streaming platforms",
+      "category": "Digital Footprint",
+      "points": 10,
+      "impact": "Reduces unnecessary data usage",
+      "difficulty": "easy",
+      "icon": "play_circle"
+    },
+    {
+      "id": "digital_5",
+      "title": "Use Dark Mode",
+      "description": "Enable dark mode on devices to save battery",
+      "category": "Digital Footprint",
+      "points": 10,
+      "impact": "Extends battery life by 30%",
+      "difficulty": "easy",
+      "icon": "dark_mode"
+    },
+    {
+      "id": "home_1",
+      "title": "Insulate Your Home",
+      "description": "Add insulation to walls and attic to reduce heating/cooling needs",
+      "category": "Eco Home",
+      "points": 40,
+      "impact": "Cuts energy bills by 20%",
+      "difficulty": "hard",
+      "icon": "home"
+    },
+    {
+      "id": "home_2",
+      "title": "Use Eco-Friendly Cleaning Products",
+      "description": "Switch to natural, biodegradable cleaning supplies",
+      "category": "Eco Home",
+      "points": 15,
+      "impact": "Reduces water pollution",
+      "difficulty": "easy",
+      "icon": "cleaning_services"
+    },
+    {
+      "id": "home_3",
+      "title": "Install Low-Flow Showerheads",
+      "description": "Replace standard showerheads with water-saving models",
+      "category": "Eco Home",
+      "points": 25,
+      "impact": "Saves 2900 gallons per year",
+      "difficulty": "easy",
+      "icon": "shower"
+    },
+    {
+      "id": "home_4",
+      "title": "Use Programmable Thermostat",
+      "description": "Install smart thermostat to optimize heating/cooling",
+      "category": "Eco Home",
+      "points": 30,
+      "impact": "Reduces energy use by 10-15%",
+      "difficulty": "medium",
+      "icon": "thermostat"
+    },
+    {
+      "id": "home_5",
+      "title": "Seal Air Leaks",
+      "description": "Weatherstrip doors and windows to prevent drafts",
+      "category": "Eco Home",
+      "points": 20,
+      "impact": "Saves 15% on heating/cooling",
+      "difficulty": "medium",
+      "icon": "window"
+    },
+    {
+      "id": "community_1",
+      "title": "Educate Others About Climate Change",
+      "description": "Share environmental knowledge with friends and family",
+      "category": "Community Action",
+      "points": 25,
+      "impact": "Multiplies positive impact",
+      "difficulty": "easy",
+      "icon": "school"
+    },
+    {
+      "id": "community_2",
+      "title": "Support Green Businesses",
+      "description": "Choose companies with sustainable practices",
+      "category": "Community Action",
+      "points": 20,
+      "impact": "Drives market toward sustainability",
+      "difficulty": "easy",
+      "icon": "business"
+    },
+    {
+      "id": "community_3",
+      "title": "Advocate for Climate Policies",
+      "description": "Contact representatives about environmental legislation",
+      "category": "Community Action",
+      "points": 35,
+      "impact": "Influences systemic change",
+      "difficulty": "medium",
+      "icon": "campaign"
+    },
+    {
+      "id": "community_4",
+      "title": "Start a Community Garden",
+      "description": "Organize neighbors to create shared growing space",
+      "category": "Community Action",
+      "points": 45,
+      "impact": "Builds food security and community",
+      "difficulty": "hard",
+      "icon": "agriculture"
+    },
+    {
+      "id": "community_5",
+      "title": "Organize Carpool Network",
+      "description": "Create rideshare system in your neighborhood",
+      "category": "Community Action",
+      "points": 40,
+      "impact": "Reduces community emissions",
+      "difficulty": "hard",
+      "icon": "groups"
+    }
+  ]
+}

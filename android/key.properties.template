@@ -1,0 +1,8 @@
+# Android Keystore Properties Template
+# Copy this file to key.properties and fill in your actual values
+# IMPORTANT: Never commit key.properties to version control!
+
+storePassword=YOUR_KEYSTORE_PASSWORD
+keyPassword=YOUR_KEY_PASSWORD
+keyAlias=ecovisionai-release
+storeFile=../keystore/ecovisionai-release.jks

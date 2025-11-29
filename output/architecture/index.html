@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EcoVision AI Architecture → PNG</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <style>
+    :root { color-scheme: light dark; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 0; padding: 24px; background: #0f172a; color: #e5e7eb; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    h1 { margin: 0 0 12px; font-size: 24px; }
+    p { margin: 0 0 16px; color: #cbd5e1; }
+    .card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 16px; }
+    .actions { display: flex; gap: 12px; margin: 16px 0 0; }
+    button { appearance: none; border: 1px solid #334155; background: #0ea5e9; color: #fff; border-radius: 8px; padding: 10px 14px; font-weight: 600; cursor: pointer; }
+    button.secondary { background: transparent; color: #e5e7eb; }
+    .diagram-wrap { overflow: auto; padding: 16px; background: #0b1220; border-radius: 8px; }
+    .footer { margin-top: 18px; font-size: 12px; color: #94a3b8; }
+    @media (prefers-color-scheme: light) {
+      body { background: #fafafa; color: #0f172a; }
+      p { color: #334155; }
+      .card { background: #fff; border-color: #e5e7eb; }
+      .diagram-wrap { background: #f8fafc; }
+      button.secondary { color: #0f172a; }
+    }
+  </style>
+  <!-- Mermaid for diagram rendering -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <!-- save-svg-as-png for robust PNG export -->
+  <script src="https://cdn.jsdelivr.net/npm/save-svg-as-png@1.4.17/lib/saveSvgAsPng.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>EcoVision AI Architecture → PNG</h1>
+    <p>Render the project architecture and download as a PNG.</p>
+
+    <div class="card">
+      <div id="diagram" class="diagram-wrap">
+        <div class="mermaid" id="mermaid-source" style="white-space: pre;">
+          graph TD
+            A[Flutter App (Material 3, Riverpod)] --> B[Features]
+            B --> B1[Biodiversity Ear]
+            B --> B2[Aqua Lens]
+            B --> B3[Eco Action Hub]
+
+            A --> C[Core Services]
+            C --> C1[TFLite Service (Bird Model)]
+            C --> C2[Permission Service]
+            C --> C3[Storage / Preferences]
+
+            B1 --> D1[Audio Recorder]
+            D1 --> D2[Signal Processing]
+            D2 --> D3[Classification Results]
+            D3 -->|Online| E1[BirdNET Cloud API]
+            D3 -->|Offline| E2[On-device Inference]
+
+            B2 --> F1[Camera / Gallery]
+            F1 --> F2[RGB Extraction & Turbidity]
+            F2 --> F3[Quality Rating]
+
+            B3 --> G1[Task Catalog (50+)]
+            G1 --> G2[Progress & Points]
+            G2 --> G3[Offline First]
+
+            A --> H[Android Layer]
+            H --> H1[Manifest + Permissions]
+            H --> H2[Gradle Build / Signing]
+            H --> H3[Adaptive Launcher Icons]
+
+            style A fill:#1B5E20,stroke:#0b3d13,stroke-width:2,color:#fff
+            style B fill:#0ea5e9,stroke:#0369a1,color:#fff
+            style C fill:#9333ea,stroke:#6b21a8,color:#fff
+            style H fill:#f59e0b,stroke:#b45309,color:#000
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="renderBtn" class="secondary">Render Diagram</button>
+        <button id="downloadBtn">Download PNG</button>
+      </div>
+
+      <div class="footer">Tip: Edit the Mermaid source above to customize before export.</div>
+    </div>
+  </div>
+
+  <script>
+    // Initialize Mermaid without auto-start to control rendering
+    mermaid.initialize({ startOnLoad: false, theme: 'default' });
+
+    async function renderDiagram() {
+      try {
+        const srcEl = document.getElementById('mermaid-source');
+        const src = srcEl.textContent.trim();
+        const wrap = document.getElementById('diagram');
+
+        // Render to SVG using mermaidAPI
+        const { svg } = await mermaid.render('ecovision-arch', src);
+        wrap.innerHTML = svg;
+
+        // Ensure exported SVG has a background for light/dark modes
+        const svgEl = wrap.querySelector('svg');
+        if (svgEl) {
+          const bg = getComputedStyle(document.body).backgroundColor;
+          const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+          rect.setAttribute('x', '0');
+          rect.setAttribute('y', '0');
+          rect.setAttribute('width', svgEl.viewBox.baseVal.width || svgEl.getBoundingClientRect().width || 1200);
+          rect.setAttribute('height', svgEl.viewBox.baseVal.height || svgEl.getBoundingClientRect().height || 800);
+          rect.setAttribute('fill', bg);
+          svgEl.insertBefore(rect, svgEl.firstChild);
+        }
+      } catch (e) {
+        console.error('Mermaid render failed:', e);
+        alert('Failed to render diagram. Please try again.');
+      }
+    }
+
+    function downloadPNG() {
+      const svgEl = document.querySelector('#diagram svg');
+      if (!svgEl) {
+        alert('Please render the diagram first.');
+        return;
+      }
+      const bg = getComputedStyle(document.body).backgroundColor;
+      const opts = { scale: 2, backgroundColor: bg, encoderOptions: 1 };
+      try {
+        window.saveSvgAsPng(svgEl, 'EcoVision-Architecture.png', opts);
+      } catch (e) {
+        console.error('PNG export failed:', e);
+        alert('Failed to export PNG.');
+      }
+    }
+
+    document.getElementById('renderBtn').addEventListener('click', renderDiagram);
+    document.getElementById('downloadBtn').addEventListener('click', downloadPNG);
+
+    // Auto-render on load
+    window.addEventListener('DOMContentLoaded', () => {
+      renderDiagram();
+    });
+  </script>
+</body>
+</html>
