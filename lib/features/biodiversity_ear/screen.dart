@@ -67,6 +67,8 @@ class _BiodiversityEarScreenState extends ConsumerState<BiodiversityEarScreen> {
               _buildRecordingCard(context, theme, state),
               const SizedBox(height: 24),
               if (state.results.isNotEmpty) _buildResultsCard(theme, state),
+              if (state.results.isEmpty && !state.isRecording && !state.isAnalyzing && state.currentRecordingPath != null)
+                _buildNoDetectionCard(theme),
               if (state.error != null) _buildErrorCard(theme, state),
             ],
           ),
@@ -208,8 +210,17 @@ class _BiodiversityEarScreenState extends ConsumerState<BiodiversityEarScreen> {
                     ? () => ref.read(biodiversityEarProvider.notifier).startRecording()
                     : null,
                 icon: const Icon(Icons.mic),
-                label: const Text('Start Recording'),
+                label: const Text('Record Audio'),
                 style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                ),
+              ),
+              const SizedBox(height: 12),
+              OutlinedButton.icon(
+                onPressed: () => ref.read(biodiversityEarProvider.notifier).uploadAudioFile(),
+                icon: const Icon(Icons.upload_file),
+                label: const Text('Upload Audio File'),
+                style: OutlinedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                 ),
               ),
@@ -327,6 +338,40 @@ class _BiodiversityEarScreenState extends ConsumerState<BiodiversityEarScreen> {
                 ref.read(biodiversityEarProvider.notifier).clearError();
               },
               color: Colors.red[700],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNoDetectionCard(ThemeData theme) {
+    return Card(
+      color: Colors.orange[50],
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            Icon(
+              Icons.search_off,
+              size: 48,
+              color: Colors.orange[700],
+            ),
+            const SizedBox(height: 12),
+            Text(
+              'No Bird Detected',
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: Colors.orange[900],
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'The AI could not confidently identify any bird species in the audio. Try recording in a quieter environment or closer to the bird.',
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: Colors.orange[800],
+              ),
+              textAlign: TextAlign.center,
             ),
           ],
         ),

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:record/record.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:flutter/services.dart';
 import '../../core/models/classification_result.dart';
 import '../../core/services/tflite_service.dart';
 import '../../core/services/permission_service.dart';
@@ -257,6 +258,81 @@ class BiodiversityEarNotifier extends StateNotifier<BiodiversityEarState> {
   /// Clear current results
   void clearResults() {
     state = state.copyWith(results: []);
+  }
+
+  /// Upload and analyze audio file from device storage
+  Future<void> uploadAudioFile() async {
+    try {
+      // Use platform channel to pick audio file
+      const platform = MethodChannel('ecovisionai/file_picker');
+      
+      state = state.copyWith(
+        isAnalyzing: true,
+        error: null,
+        results: [],
+      );
+
+      try {
+        final String? filePath = await platform.invokeMethod('pickAudioFile');
+        
+        if (filePath == null || filePath.isEmpty) {
+          state = state.copyWith(isAnalyzing: false);
+          return;
+        }
+
+        final file = File(filePath);
+        if (!await file.exists()) {
+          state = state.copyWith(
+            isAnalyzing: false,
+            error: 'Selected file does not exist',
+          );
+          return;
+        }
+
+        // Check file size (max 50MB)
+        final fileSize = await file.length();
+        if (fileSize > 50 * 1024 * 1024) {
+          state = state.copyWith(
+            isAnalyzing: false,
+            error: 'File too large. Maximum size is 50MB',
+          );
+          return;
+        }
+
+        // Run AI inference
+        final inferenceResult = await _tfliteService.runBirdInference(filePath);
+        
+        print('[BiodiversityEar] Uploaded file analyzed using: ${inferenceResult.method}');
+
+        state = state.copyWith(
+          isAnalyzing: false,
+          results: inferenceResult.results,
+          currentRecordingPath: filePath,
+        );
+
+      } on PlatformException catch (e) {
+        state = state.copyWith(
+          isAnalyzing: false,
+          error: 'Failed to pick file: ${e.message}',
+        );
+      }
+
+    } on InferenceTimeoutException catch (e) {
+      state = state.copyWith(
+        isAnalyzing: false,
+        error: 'Analysis timed out. The audio file might be too long or complex.',
+      );
+    } on ModelInitializationException catch (e) {
+      state = state.copyWith(
+        isAnalyzing: false,
+        error: 'AI model not available. ${e.message}',
+      );
+    } catch (e) {
+      state = state.copyWith(
+        isAnalyzing: false,
+        error: 'Failed to analyze audio file: ${e.toString()}',
+      );
+    }
   }
 
   /// Clear error message

@@ -141,10 +141,20 @@ class AquaLensNotifier extends StateNotifier<AquaLensState> {
       // Run OpenCV color analysis
       final results = await _openCVService.analyzeTestStrip(File(imagePath));
 
-      state = state.copyWith(
-        isAnalyzing: false,
-        colorResults: results,
-      );
+      if (results == null) {
+        // No test strip detected
+        state = state.copyWith(
+          isAnalyzing: false,
+          colorResults: {},
+          error: 'No test strip detected. Please ensure the test strip is clearly visible in the image.',
+        );
+      } else {
+        state = state.copyWith(
+          isAnalyzing: false,
+          colorResults: results,
+          error: null,
+        );
+      }
 
       // Clean up temporary file immediately after analysis
       await _resourceManager.cleanupFile(imagePath);
@@ -170,7 +180,22 @@ class AquaLensNotifier extends StateNotifier<AquaLensState> {
       _resourceManager.trackFile(imagePath);
       state = state.copyWith(isCapturing: false, isAnalyzing: true);
       final results = await _openCVService.analyzeTestStrip(imageFile);
-      state = state.copyWith(isAnalyzing: false, colorResults: results);
+      
+      if (results == null) {
+        // No test strip detected
+        state = state.copyWith(
+          isAnalyzing: false,
+          colorResults: {},
+          error: 'No test strip detected. Please ensure the test strip is clearly visible in the image.',
+        );
+      } else {
+        state = state.copyWith(
+          isAnalyzing: false,
+          colorResults: results,
+          error: null,
+        );
+      }
+      
       await _resourceManager.cleanupFile(imagePath);
     } catch (e) {
       state = state.copyWith(isCapturing: false, isAnalyzing: false, error: 'Analysis failed: ${e.toString()}');

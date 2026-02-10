@@ -1,821 +1,449 @@
-# 📚 EcoVision AI - Technical Documentation
+# EcoVision AI - Technical Documentation
 
-**Version 4.0 | Last Updated: November 29, 2025**
+Complete technical documentation for developers.
 
----
+## 📋 Table of Contents
 
-## Table of Contents
-
-1. [Project Overview](#project-overview)
-2. [Architecture](#architecture)
-3. [AI Models & Accuracy](#ai-models--accuracy)
-4. [Features Documentation](#features-documentation)
-5. [Technical Stack](#technical-stack)
-6. [Installation & Setup](#installation--setup)
-7. [API Reference](#api-reference)
-8. [Performance](#performance)
-9. [Security & Privacy](#security--privacy)
-10. [Testing](#testing)
-11. [Deployment](#deployment)
-12. [Troubleshooting](#troubleshooting)
-
----
-
-## Project Overview
-
-### What is EcoVision AI?
-
-EcoVision AI is a mobile application that leverages artificial intelligence to make environmental monitoring accessible to everyone. The app combines multiple AI-powered features to help users identify bird species, analyze water quality, and take actionable steps toward environmental conservation.
-
-### Key Statistics
-
-- **Total Lines of Code:** 15,000+
-- **Development Time:** 6 months
-- **Supported Platforms:** Android (iOS coming soon)
-- **Minimum Android Version:** 6.0 (API 23)
-- **Target Android Version:** 14 (API 34)
-- **App Size:** 49.8 MB
-- **Supported Languages:** English (more coming)
-
-### Project Structure
-
-```
-ecovision-ai/
-├── android/                 # Android native code
-├── assets/                  # Static assets
-│   ├── data/               # JSON data files
-│   ├── icons/              # App icons
-│   └── models/             # AI model files
-├── lib/                    # Flutter application code
-│   ├── core/              # Core functionality
-│   │   ├── models/        # Data models
-│   │   ├── services/      # Business logic services
-│   │   ├── theme/         # UI theme
-│   │   ├── utils/         # Utility functions
-│   │   └── widgets/       # Reusable widgets
-│   └── features/          # Feature modules
-│       ├── aqua_lens/     # Water quality analysis
-│       ├── biodiversity_ear/ # Bird identification
-│       ├── eco_action_hub/   # Eco tasks
-│       ├── main_scaffold/    # Main navigation
-│       └── splash/           # Splash screen
-├── test/                   # Test files
-├── docs/                   # Additional documentation
-└── output/                 # Build outputs
-
-```
+1. [Architecture](#architecture)
+2. [Core Services](#core-services)
+3. [Features](#features)
+4. [Data Models](#data-models)
+5. [State Management](#state-management)
+6. [Testing](#testing)
+7. [Build & Deployment](#build--deployment)
 
 ---
 
 ## Architecture
 
-### Design Pattern
-
-EcoVision AI follows a **Feature-First Architecture** with **Clean Architecture** principles:
-
+### Project Structure
 ```
-Presentation Layer (UI)
-    ↓
-State Management (Riverpod)
-    ↓
-Business Logic (Services)
-    ↓
-Data Layer (Models & Storage)
+lib/
+├── core/                    # Core functionality
+│   ├── models/             # Data models
+│   ├── services/           # Business logic services
+│   ├── theme/              # App theming
+│   ├── utils/              # Utility functions
+│   └── widgets/            # Reusable widgets
+├── features/               # Feature modules
+│   ├── aqua_lens/         # Water quality detection
+│   ├── biodiversity_ear/  # Bird voice recognition
+│   ├── eco_action_hub/    # Environmental tasks
+│   └── splash/            # Splash screen
+└── main.dart              # App entry point
 ```
 
-### State Management
-
-**Riverpod 2.6.1** is used for state management:
-
-- **Providers:** Dependency injection
-- **StateNotifier:** Feature state management
-- **Consumer:** UI updates
-- **Ref:** Provider access
-
-### Key Services
-
-1. **TFLiteService** - Hybrid AI bird identification
-2. **BirdNetService** - Cloud API integration
-3. **ConnectivityService** - Internet detection
-4. **OpenCVService** - Image processing
-5. **PermissionService** - Runtime permissions
-6. **ResourceManager** - File management
+### Design Patterns
+- **Provider Pattern**: Riverpod for state management
+- **Service Pattern**: Separate business logic from UI
+- **Repository Pattern**: Data access abstraction
+- **Factory Pattern**: Model creation
 
 ---
 
-## AI Models & Accuracy
+## Core Services
 
-### Bird Identification System
+### 1. OpenCV Service (`opencv_service.dart`)
 
-#### Hybrid AI Architecture
+**Purpose**: Water test strip analysis using computer vision
 
-```
-User Records Audio (10 seconds)
-    ↓
-Check Internet Connectivity
-    ↓
-┌─────────────────┬─────────────────┐
-│   ONLINE        │    OFFLINE      │
-│                 │                 │
-│ BirdNET API     │ Enhanced Signal │
-│ 95-98% accuracy │ 75-80% accuracy │
-└─────────────────┴─────────────────┘
-    ↓
-Return Top 5 Species with Confidence
-```
-
-#### Method 1: BirdNET Cloud API (Online)
-
-**Accuracy:** 95-98%
-
-**How it works:**
-1. Records 10-second WAV audio file
-2. Sends to Cornell Lab's BirdNET API
-3. API analyzes using deep learning CNN
-4. Returns species probabilities
-5. Displays top 5 results
-
-**Advantages:**
-- Highest accuracy
-- Supports 6000+ species worldwide
-- Constantly updated model
-- No local processing needed
-
-**Limitations:**
-- Requires internet connection
-- API rate limits (handled gracefully)
-- ~2-5 second latency
-
-**Technical Details:**
-- **API Endpoint:** `https://api.birdnet.cornell.edu/analyze`
-- **Input Format:** WAV audio, 44.1kHz sample rate
-- **Output Format:** JSON with species and confidence scores
-- **Timeout:** 30 seconds
-- **Retry Logic:** Automatic fallback to offline method
-
-#### Method 2: Enhanced Signal Processing (Offline)
-
-**Accuracy:** 75-80%
-
-**How it works:**
-1. Loads audio file as byte array
-2. Extracts 5 audio features:
-   - **Average Amplitude:** Overall loudness
-   - **Max Amplitude:** Peak volume
-   - **Zero-Crossing Rate:** Frequency indicator
-   - **Energy Distribution:** Power across signal
-   - **Spectral Centroid:** Brightness/timbre
-3. Calculates rhythm detection (temporal variance)
-4. Applies bird-specific scoring algorithms
-5. Returns top 5 matches
-
-**Feature Extraction Details:**
-
+**Key Methods**:
 ```dart
-// Zero-Crossing Rate (frequency)
-zeroCrossingRate = zeroCrossings / audioLength
-
-// Energy Distribution
-energy = Σ(normalized_sample²) / length
-
-// Spectral Centroid (brightness)
-centroid = Σ(i * magnitude) / Σ(magnitude) / length
-
-// Rhythm Detection
-variance = Σ(chunkEnergy - avgEnergy)² / chunks
-rhythmicity = √variance
+Future<Map<String, List<int>>?> analyzeTestStrip(File imageFile)
 ```
 
-**Bird-Specific Scoring:**
+**Algorithm**:
+1. **Test Strip Detection**
+   - Convert to grayscale
+   - Apply Gaussian blur (radius: 3)
+   - Sobel edge detection
+   - Calculate edge ratio (5-15% for valid strips)
+   - Check aspect ratio (0.3-3.0)
+   - Measure color variance (>1000)
 
-| Bird Type | Key Features | Score Weights |
-|-----------|--------------|---------------|
-| **Crow** | Low freq + Loud | Amplitude: 30%, ZCR: 35%, Energy: 20% |
-| **Eagle/Hawk** | Very low freq + Powerful | Amplitude: 35%, ZCR: 40% |
-| **Chickadee/Wren** | High freq + Rapid | ZCR: 40%, Centroid: 30%, Rhythm: 15% |
-| **Woodpecker** | Rhythmic + Percussive | Amplitude: 40%, Rhythm: 35% |
-| **Owl** | Very low freq + Deep | ZCR: 45%, Amplitude: 25% |
+2. **Region Extraction**
+   - Crop center 60% of image
+   - Focus on test strip area
 
-**Advantages:**
-- Works completely offline
-- No API costs
-- Instant results (<1 second)
-- Privacy-preserving
+3. **Color Pad Extraction**
+   - Divide into 4 equal sections
+   - Each section = one chemical parameter
 
-**Limitations:**
-- Lower accuracy than cloud API
-- Limited to 12 species
-- Sensitive to background noise
+4. **Color Analysis**
+   - Sample center 50% of each pad
+   - Convert RGB to HSV
+   - Calculate average color
+   - Return RGB values
 
-**Supported Species (Offline):**
-1. American Robin
-2. Blue Jay
-3. Cardinal
-4. Chickadee
-5. Crow
-6. Eagle
-7. Finch
-8. Hawk
-9. Owl
-10. Sparrow
-11. Woodpecker
-12. Wren
+**Returns**: `Map<String, List<int>>` or `null` if no strip detected
 
-### Water Quality Analysis
+### 2. TFLite Service (`tflite_service.dart`)
 
-**Accuracy:** 40-50%
+**Purpose**: Bird voice recognition using audio analysis
 
-**Method:** RGB Color Extraction + Threshold Analysis
-
-**How it works:**
-1. Captures image via camera or gallery
-2. Decodes image to RGBA format
-3. Extracts RGB values from center region
-4. Calculates brightness: `(R + G + B) / 3`
-5. Applies quality classification rules
-
-**Classification Rules:**
-
+**Key Methods**:
 ```dart
-if (brightness > 200 && blue > green && blue > red) {
-  quality = "Excellent - Clear water"
-  confidence = 0.85
-} else if (brightness > 150) {
-  quality = "Good - Slightly turbid"
-  confidence = 0.75
-} else if (green > blue) {
-  quality = "Poor - Algae present"
-  confidence = 0.70
-} else {
-  quality = "Very Poor - Contaminated"
-  confidence = 0.65
-}
+Future<BirdIdentificationResult> runBirdInference(String audioPath)
 ```
 
-**Limitations:**
-- Lighting dependent
-- No chemical analysis
-- Basic color thresholds
-- Requires good photo quality
+**Algorithm**:
+1. **Feature Extraction**
+   - Average amplitude (loudness)
+   - Maximum amplitude (peak)
+   - Zero-crossing rate (frequency)
+   - Energy (power)
+   - Spectral centroid (brightness)
+   - Spectral rolloff (frequency distribution)
 
-**Future Improvements:**
-- Machine learning model (target: 75-85% accuracy)
-- Lighting normalization
-- Multi-region analysis
-- Turbidity calculation
-- pH estimation
+2. **Pattern Matching**
+   - Compare features against 442+ species
+   - Score each species (0.3-0.75)
+   - Apply feature-based scoring:
+     - High-frequency birds: +0.25
+     - Low-frequency birds: +0.25
+     - Loud birds: +0.2
+     - Medium songbirds: +0.2
+
+3. **Confidence Filtering**
+   - Threshold: 40%
+   - Return top 5 matches
+   - Show "No detection" if below threshold
+
+**Returns**: `BirdIdentificationResult` with confidence scores
+
+### 3. Permission Service (`permission_service.dart`)
+
+**Purpose**: Centralized permission handling
+
+**Key Methods**:
+```dart
+Future<PermissionResult> requestCameraPermission()
+Future<PermissionResult> requestMicrophonePermission()
+Future<PermissionResult> requestStoragePermission()
+```
+
+**Features**:
+- Unified permission API
+- Error handling
+- User-friendly messages
+- Permission status tracking
+
+### 4. Resource Manager (`resource_manager.dart`)
+
+**Purpose**: Temporary file management
+
+**Key Methods**:
+```dart
+Future<String> createTempFilePath(String prefix, String extension)
+void trackFile(String path)
+Future<void> cleanupFile(String path)
+```
+
+**Features**:
+- Automatic cleanup
+- File tracking
+- Error handling
 
 ---
 
-## Features Documentation
+## Features
 
-### 1. Biodiversity Ear (Bird Identification)
+### Aqua Lens (Water Quality)
 
-**Purpose:** Identify bird species from audio recordings
+**Files**:
+- `lib/features/aqua_lens/screen.dart` - UI
+- `lib/features/aqua_lens/provider.dart` - State management
 
-**User Flow:**
-1. User taps "Start Recording"
-2. Records for 10 seconds (auto-stops)
-3. App analyzes audio
-4. Displays top 5 species with confidence scores
-5. User can view details or record again
-
-**Technical Implementation:**
-
+**State**:
 ```dart
-// Provider: biodiversityEarProvider
-// Service: TFLiteService
-// State: BiodiversityEarState
-
-// Key Methods:
-- initialize() // Request permissions
-- startRecording() // Begin 10-second recording
-- stopRecording() // Analyze audio
-- clearResults() // Reset state
-```
-
-**Permissions Required:**
-- `RECORD_AUDIO` - Microphone access
-- `WRITE_EXTERNAL_STORAGE` - Save recordings
-
-**Audio Specifications:**
-- **Format:** WAV
-- **Sample Rate:** 44.1 kHz
-- **Bit Rate:** 128 kbps
-- **Duration:** 10 seconds
-- **File Size:** ~1.7 MB
-
-### 2. Aqua Lens (Water Quality)
-
-**Purpose:** Analyze water quality from photos
-
-**User Flow:**
-1. User taps camera or gallery icon
-2. Takes photo or selects existing
-3. App analyzes RGB colors
-4. Displays quality rating and details
-5. User can analyze another sample
-
-**Technical Implementation:**
-
-```dart
-// Provider: aquaLensProvider
-// Service: OpenCVService
-// State: AquaLensState
-
-// Key Methods:
-- capturePhoto() // Take new photo
-- pickFromGallery() // Select existing
-- analyzeExisting(File) // Analyze image
-- clearResults() // Reset state
-```
-
-**Permissions Required:**
-- `CAMERA` - Camera access
-- `READ_EXTERNAL_STORAGE` - Gallery access
-
-**Image Processing:**
-- Decodes to RGBA format
-- Extracts center region (default)
-- Calculates average RGB values
-- Applies classification algorithm
-
-### 3. Eco Action Hub
-
-**Purpose:** Track and complete eco-friendly tasks
-
-**User Flow:**
-1. User browses 50 available tasks
-2. Selects task to view details
-3. Completes task in real life
-4. Marks as complete in app
-5. Earns impact points
-6. Tracks progress across categories
-
-**Task Categories:**
-1. **Energy Conservation** (10 tasks)
-2. **Water Conservation** (10 tasks)
-3. **Waste Reduction** (10 tasks)
-4. **Sustainable Transportation** (10 tasks)
-5. **Biodiversity Protection** (10 tasks)
-
-**Technical Implementation:**
-
-```dart
-// Provider: ecoActionHubProvider
-// Model: EcoTask, UserProgress
-// Storage: SharedPreferences
-
-// Key Methods:
-- loadTasks() // Load from JSON
-- toggleTaskCompletion(taskId) // Mark complete
-- getProgress() // Calculate stats
-- getCategoryTasks(category) // Filter tasks
-```
-
-**Data Structure:**
-
-```json
-{
-  "id": "task_001",
-  "title": "Switch to LED Bulbs",
-  "description": "Replace incandescent bulbs with LED",
-  "category": "energy",
-  "difficulty": "easy",
-  "impact": 8,
-  "icon": "lightbulb"
+class AquaLensState {
+  bool isInitialized;
+  bool isCapturing;
+  bool isAnalyzing;
+  Map<String, List<int>> colorResults;
+  String? error;
+  CameraController? cameraController;
+  bool hasPermission;
 }
 ```
 
-**Progress Tracking:**
-- Total tasks completed
-- Category-wise completion
-- Impact points earned
-- Completion percentage
+**Flow**:
+1. Initialize camera
+2. Request permissions
+3. Show camera preview
+4. Capture image on button press
+5. Analyze with OpenCV
+6. Display results or error
+
+### Biodiversity Ear (Bird Recognition)
+
+**Files**:
+- `lib/features/biodiversity_ear/screen.dart` - UI
+- `lib/features/biodiversity_ear/provider.dart` - State management
+
+**State**:
+```dart
+class BiodiversityEarState {
+  bool isInitialized;
+  bool isRecording;
+  bool isAnalyzing;
+  List<ClassificationResult> results;
+  String? error;
+  bool hasPermission;
+  int recordingDuration;
+  String? currentRecordingPath;
+}
+```
+
+**Flow**:
+1. Initialize recorder
+2. Request permissions
+3. Record audio (10 seconds) OR upload file
+4. Analyze with audio processing
+5. Display top 5 results or "No detection"
+
+### Eco Action Hub
+
+**Files**:
+- `lib/features/eco_action_hub/screen.dart` - Task list UI
+- `lib/features/eco_action_hub/task_detail_screen.dart` - Task details
+- `lib/features/eco_action_hub/providers.dart` - State management
+
+**Features**:
+- Load tasks from JSON
+- Filter by category
+- Track completion
+- Persist progress
 
 ---
 
-## Technical Stack
+## Data Models
 
-### Frontend
-
-**Flutter 3.38.3**
-- Cross-platform mobile framework
-- Hot reload for fast development
-- Rich widget library
-- Native performance
-
-**Dart 3.x**
-- Null-safe language
-- Strong typing
-- Async/await support
-- Modern syntax
-
-**Riverpod 2.6.1**
-- Compile-safe state management
-- Provider-based architecture
-- Automatic disposal
-- Testing-friendly
-
-### UI/UX
-
-**Material Design 3**
-- Modern design language
-- Adaptive components
-- Smooth animations
-- Accessibility support
-
-**Google Fonts**
-- Custom typography
-- Web font loading
-- Font caching
-
-**Color Scheme:**
-- Primary: Fresh Green (#1B5E20)
-- Secondary: Light Green (#4CAF50)
-- Background: White (#FFFFFF)
-- Surface: Light Gray (#F5F5F5)
-
-### Backend Services
-
-**BirdNET API**
-- Provider: Cornell Lab of Ornithology
-- Endpoint: `api.birdnet.cornell.edu`
-- Method: POST multipart/form-data
-- Response: JSON with species probabilities
-
-**Connectivity Plus**
-- Internet detection
-- Connection type monitoring
-- Real-time status updates
-
-### Storage
-
-**SharedPreferences**
-- Key-value storage
-- User progress data
-- Task completion status
-- App settings
-
-**Path Provider**
-- Temporary file storage
-- Audio recordings
-- Cache management
-
-### Permissions
-
-**Permission Handler**
-- Runtime permission requests
-- Permission status checking
-- Settings navigation
-- Platform-specific handling
-
-### Media
-
-**Camera Plugin**
-- Camera access
-- Photo capture
-- Flash control
-- Resolution settings
-
-**Image Picker**
-- Gallery access
-- Image selection
-- Cropping support
-- Multiple formats
-
-**Record Plugin**
-- Audio recording
-- WAV encoding
-- Sample rate control
-- File path management
-
----
-
-## Installation & Setup
-
-### Prerequisites
-
-- **Flutter SDK:** 3.13.0 or higher
-- **Dart SDK:** 3.1.0 or higher
-- **Android Studio:** Latest version
-- **Android SDK:** API 23-34
-- **Java:** JDK 11 or higher
-
-### Development Setup
-
-```bash
-# 1. Clone repository
-git clone https://github.com/yourusername/ecovision-ai.git
-cd ecovision-ai
-
-# 2. Install dependencies
-flutter pub get
-
-# 3. Run code generation (if needed)
-flutter pub run build_runner build
-
-# 4. Check for issues
-flutter doctor
-
-# 5. Run on device/emulator
-flutter run
-
-# 6. Run tests
-flutter test
-
-# 7. Build release APK
-flutter build apk --release
-```
-
-### Environment Variables
-
-No environment variables required. All configuration is in `pubspec.yaml`.
-
-### Configuration Files
-
-**pubspec.yaml** - Dependencies and assets
-**android/app/build.gradle** - Android build config
-**android/app/src/main/AndroidManifest.xml** - Permissions
-
----
-
-## API Reference
-
-### TFLiteService
-
+### ClassificationResult
 ```dart
-class TFLiteService {
-  // Initialize AI system
-  Future<void> init()
-  
-  // Run bird identification
-  Future<BirdIdentificationResult> runBirdInference(String audioPath)
-  
-  // Check initialization status
-  bool get isInitialized
-  
-  // Get error message
-  String? get initializationError
-  
-  // Cleanup resources
-  void dispose()
+class ClassificationResult {
+  final String label;
+  final double confidence;
+  final DateTime timestamp;
 }
 ```
 
-### BirdNetService
-
+### EcoTask
 ```dart
-class BirdNetService {
-  // Identify bird from audio
-  Future<List<ClassificationResult>> identifyBird(
-    String audioPath,
-    {double? latitude, double? longitude}
-  )
-  
-  // Check API availability
-  Future<bool> isAvailable()
+class EcoTask {
+  final String id;
+  final String title;
+  final String description;
+  final String category;
+  final int points;
+  final String difficulty;
 }
 ```
 
-### ConnectivityService
-
+### UserProgress
 ```dart
-class ConnectivityService {
-  // Check internet connection
-  Future<bool> isOnline()
-  
-  // Get connectivity stream
-  Stream<ConnectivityResult> get onConnectivityChanged
-}
-```
-
-### OpenCVService
-
-```dart
-class OpenCVService {
-  // Analyze water test strip
-  Future<Map<String, List<int>>> analyzeTestStrip(File image)
+class UserProgress {
+  final Set<String> completedTasks;
+  final int totalPoints;
+  final DateTime lastUpdated;
 }
 ```
 
 ---
 
-## Performance
+## State Management
 
-### App Performance
+### Riverpod Providers
 
-- **Cold Start Time:** <2 seconds
-- **Hot Reload:** <1 second
-- **Memory Usage:** 80-120 MB
-- **Battery Impact:** Low (optimized)
-- **Network Usage:** Minimal (only for cloud API)
+**Service Providers** (Singleton):
+```dart
+final openCVServiceProvider = Provider<OpenCVService>((ref) => OpenCVService._());
+final tfliteServiceProvider = Provider<TFLiteService>((ref) => TFLiteService._());
+final permissionServiceProvider = Provider<PermissionService>((ref) => PermissionService());
+final resourceManagerProvider = Provider<ResourceManager>((ref) => ResourceManager());
+```
 
-### AI Performance
-
-| Operation | Time | Notes |
-|-----------|------|-------|
-| **Bird ID (Cloud)** | 2-5s | Network dependent |
-| **Bird ID (Offline)** | <1s | Instant |
-| **Water Analysis** | <1s | Instant |
-| **Task Loading** | <0.5s | Cached |
-
-### Optimization Techniques
-
-1. **Lazy Loading:** Features load on demand
-2. **Image Caching:** Reduces memory usage
-3. **State Persistence:** Saves user progress
-4. **Resource Cleanup:** Automatic disposal
-5. **Efficient Rendering:** Widget optimization
-
----
-
-## Security & Privacy
-
-### Data Privacy
-
-- **No User Accounts:** No personal data collected
-- **Local Storage:** All data stored on device
-- **No Tracking:** No analytics or tracking
-- **No Ads:** Ad-free experience
-
-### Permissions
-
-All permissions are requested at runtime with clear explanations:
-
-- **Camera:** For water quality photos
-- **Microphone:** For bird audio recording
-- **Storage:** For saving recordings and photos
-- **Internet:** For cloud AI API (optional)
-
-### API Security
-
-- **HTTPS Only:** All API calls encrypted
-- **No API Keys:** BirdNET API is public
-- **Rate Limiting:** Handled gracefully
-- **Error Handling:** No sensitive data in errors
+**State Notifier Providers**:
+```dart
+final aquaLensProvider = StateNotifierProvider<AquaLensNotifier, AquaLensState>(...);
+final biodiversityEarProvider = StateNotifierProvider<BiodiversityEarNotifier, BiodiversityEarState>(...);
+final ecoTasksProvider = StateNotifierProvider<EcoTasksNotifier, EcoTasksState>(...);
+```
 
 ---
 
 ## Testing
 
-### Test Coverage
+### Unit Tests
+Location: `test/unit/`
 
-- **Unit Tests:** Core business logic
-- **Widget Tests:** UI components
-- **Integration Tests:** Feature flows
-- **Coverage:** 60%+ (target: 80%)
+**Models**:
+- `classification_result_test.dart`
+- `eco_task_test.dart`
+- `user_progress_test.dart`
+
+**Services**:
+- `permission_service_test.dart`
+
+### Integration Tests
+Location: `test/integration/`
+
+**Tests**:
+- `navigation_test.dart` - Navigation flow
+- `eco_action_hub_test.dart` - Task management
+- `offline_functionality_test.dart` - Offline mode
 
 ### Running Tests
-
 ```bash
-# Run all tests
+# All tests
 flutter test
 
-# Run specific test file
-flutter test test/unit/services/tflite_service_test.dart
+# Specific test
+flutter test test/unit/models/classification_result_test.dart
 
-# Run with coverage
+# With coverage
 flutter test --coverage
-
-# View coverage report
-genhtml coverage/lcov.info -o coverage/html
-```
-
-### Test Structure
-
-```
-test/
-├── unit/                    # Unit tests
-│   ├── models/             # Model tests
-│   └── services/           # Service tests
-├── widget/                 # Widget tests
-└── integration/            # Integration tests
 ```
 
 ---
 
-## Deployment
+## Build & Deployment
 
-### Building Release APK
-
+### Development Build
 ```bash
-# Clean previous builds
+flutter run
+```
+
+### Release Build
+```bash
+# Clean
 flutter clean
 
 # Get dependencies
 flutter pub get
 
-# Generate app icons
-flutter pub run flutter_launcher_icons
-
-# Build release APK
+# Build APK
 flutter build apk --release
 
-# Output location
-# build/app/outputs/flutter-apk/app-release.apk
+# Output: build/app/outputs/flutter-apk/app-release.apk
 ```
 
-### APK Details
-
-- **File Name:** EcoVision-AI-FINAL-v4.0.apk
-- **Size:** 49.8 MB
-- **Min SDK:** Android 6.0 (API 23)
-- **Target SDK:** Android 14 (API 34)
-- **Architecture:** ARM, ARM64, x86, x86_64
-
-### Installation
-
+### Build Script
+Use `build_apk.bat` for automated building:
 ```bash
-# Install via ADB
-adb install EcoVision-AI-FINAL-v4.0.apk
-
-# Install on specific device
-adb -s <device_id> install EcoVision-AI-FINAL-v4.0.apk
-
-# Reinstall (keep data)
-adb install -r EcoVision-AI-FINAL-v4.0.apk
+build_apk.bat
 ```
+
+### Requirements
+- Flutter SDK 3.38.3+
+- Dart 3.10.1+
+- Java JDK 17
+- Android SDK (API 21+)
+
+### Signing (Production)
+1. Create keystore:
+```bash
+keytool -genkey -v -keystore ecovision.keystore -alias ecovision -keyalg RSA -keysize 2048 -validity 10000
+```
+
+2. Configure `android/key.properties`:
+```properties
+storePassword=<password>
+keyPassword=<password>
+keyAlias=ecovision
+storeFile=<path-to-keystore>
+```
+
+3. Build signed APK:
+```bash
+flutter build apk --release
+```
+
+---
+
+## Performance Optimization
+
+### Image Processing
+- Use appropriate image resolution
+- Implement caching
+- Async processing
+- Memory management
+
+### Audio Processing
+- Stream processing for large files
+- Buffer management
+- Cleanup temporary files
+
+### State Management
+- Selective rebuilds
+- Memoization
+- Lazy loading
 
 ---
 
 ## Troubleshooting
 
-### Common Issues
+### Build Issues
+**Gradle SSL errors**:
+- Solution: Use `gradle.properties` with SSL trust store config
 
-#### 1. Build Failures
+**Java not found**:
+- Solution: Set `JAVA_HOME` environment variable
 
-**Problem:** Gradle build fails
-**Solution:**
-```bash
-flutter clean
-flutter pub get
-flutter build apk --release
-```
+**Flutter not found**:
+- Solution: Add Flutter to PATH
 
-#### 2. Permission Denied
+### Runtime Issues
+**Camera not working**:
+- Check permissions
+- Verify camera availability
+- Check Android version
 
-**Problem:** Camera/microphone not working
-**Solution:** Check AndroidManifest.xml has required permissions
-
-#### 3. API Timeout
-
-**Problem:** BirdNET API times out
-**Solution:** App automatically falls back to offline method
-
-#### 4. Icon Not Showing
-
-**Problem:** App icon is default Flutter icon
-**Solution:**
-```bash
-flutter pub run flutter_launcher_icons
-flutter clean
-flutter build apk --release
-```
-
-### Debug Mode
-
-Enable debug logging:
-```dart
-debugPrint('[Feature] Message');
-```
-
-View logs:
-```bash
-flutter logs
-# or
-adb logcat | grep flutter
-```
+**Audio recording fails**:
+- Check microphone permission
+- Verify audio hardware
+- Check storage space
 
 ---
 
-## Changelog
+## API Reference
 
-See [CHANGELOG.md](CHANGELOG.md) for version history.
+### OpenCVService
+```dart
+class OpenCVService {
+  Future<Map<String, List<int>>?> analyzeTestStrip(File imageFile);
+}
+```
+
+### TFLiteService
+```dart
+class TFLiteService {
+  Future<void> init();
+  Future<BirdIdentificationResult> runBirdInference(String audioPath);
+  void dispose();
+}
+```
+
+### PermissionService
+```dart
+class PermissionService {
+  Future<PermissionResult> requestCameraPermission();
+  Future<PermissionResult> requestMicrophonePermission();
+  Future<PermissionResult> requestStoragePermission();
+}
+```
 
 ---
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.
-
----
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ## License
 
-MIT License - See [LICENSE](LICENSE) for details.
+MIT License - see [LICENSE](LICENSE) file.
 
 ---
 
-## Support
-
-For technical support:
-- **Email:** support@ecovision-ai.com
-- **Issues:** GitHub Issues
-- **Documentation:** This file
-
----
-
-**Last Updated:** November 29, 2025  
-**Version:** 4.0  
-**Maintained by:** VIREN Legacy Team
+**Last Updated**: January 2026  
+**Version**: 1.2.0
